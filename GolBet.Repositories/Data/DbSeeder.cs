@@ -141,5 +141,21 @@ public static class DbSeeder
             await userManager.CreateAsync(admin, "Admin123*");
             await userManager.AddToRoleAsync(admin, AdminRole);
         }
+
+        // Bettor user (idempotent) 
+        if (await userManager.FindByEmailAsync("bettor@golbet.com") is null)
+        {
+            var bettor = new AppUser
+            {
+                UserName = "bettor@golbet.com",
+                Email = "bettor@golbet.com",
+                FullName = "Bettor GolBet",
+                Balance = 1000m,           // initial balance for bettors
+                EmailConfirmed = true
+            };
+
+            await userManager.CreateAsync(bettor, "Bettor123*");// pasword usuario apostador
+            await userManager.AddToRoleAsync(bettor, BettorRole);
+        }
     }
 }
